@@ -1,6 +1,6 @@
 import { uploadPhoto, createUser } from './utils.js';
 
-async function asyncUploadUser() {
+export default async function asyncUploadUser() {
   try {
     const [photoResponse, userResponse] = await Promise.all([uploadPhoto(), createUser()]);
     return {
@@ -15,5 +15,3 @@ async function asyncUploadUser() {
     };
   }
 }
-
-export default asyncUploadUser;
