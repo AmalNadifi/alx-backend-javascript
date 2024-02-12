@@ -20,4 +20,3 @@ export default function groceriesList() {
   // Return the populated finalMap
   return finalMap;
 }
-
