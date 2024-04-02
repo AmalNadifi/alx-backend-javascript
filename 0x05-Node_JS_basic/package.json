@@ -13,11 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@babel/node": "^7.23.9",
-    "@babel/preset-env": "^7.24.3",
     "chai-http": "^4.3.0",
     "express": "^4.19.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",

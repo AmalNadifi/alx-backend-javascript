@@ -1,34 +1,32 @@
-const { readDatabase } = require('../utils');
+const readDatabase = require('../utils');
 
 class StudentsController {
-  static async getAllStudents(request, response) {
-    try {
-      const studentsByField = await readDatabase(process.argv[2]);
-      let output = 'This is the list of our students\n';
-      Object.entries(studentsByField).forEach(([field, students]) => {
-        const studentList = `${students.length ? students.length : 'No'} student${students.length !== 1 ? 's' : ''}`;
-        output += `Number of students in ${field}: ${studentList}. List: ${students.join(', ')}\n`;
-      });
-      response.status(200).send(output);
-    } catch (error) {
+  static getAllStudents(request, response) {
+    readDatabase(process.argv[2].toString()).then((students) => {
+      const output = [];
+      output.push('This is the list of our students');
+      const keys = Object.keys(students);
+      keys.sort();
+      for (let i = 0; i < keys.length; i += 1) {
+        output.push(`Number of students in ${keys[i]}: ${students[keys[i]].length}. List: ${students[keys[i]].join(', ')}`);
+      }
+      response.status(200).send(output.join('\n'));
+    }).catch(() => {
       response.status(500).send('Cannot load the database');
-    }
+    });
   }
 
-  static async getAllStudentsByMajor(request, response) {
-    const { major } = request.params;
-    if (major !== 'CS' && major !== 'SWE') {
-      response.status(500).send('Major parameter must be CS or SWE');
-      return;
-    }
-    try {
-      const studentsByField = await readDatabase(process.argv[2]);
-      const studentsInMajor = studentsByField[major] || [];
-      const output = `List: ${studentsInMajor.join(', ')}`;
-      response.status(200).send(output);
-    } catch (error) {
+  static getAllStudentsByMajor(request, response) {
+    const field = request.params.major;
+    readDatabase(process.argv[2].toString()).then((students) => {
+      if (!(field in students)) {
+        response.status(500).send('Major parameter must be CS or SWE');
+      } else {
+        response.status(200).send(`List: ${students[field].join(', ')}`);
+      }
+    }).catch(() => {
       response.status(500).send('Cannot load the database');
-    }
+    });
   }
 }
 
